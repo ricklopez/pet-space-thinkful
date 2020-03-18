@@ -3,9 +3,9 @@ const winston = require('winston');
 const users = require('./routes/users.routes');
 
 const api = express();
+const dbMgr = require('./data/db/jsondb-seed');
 
-
-
+dbMgr.seedDb();
 
 
 // Middleware
