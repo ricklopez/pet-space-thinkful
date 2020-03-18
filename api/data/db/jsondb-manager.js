@@ -1,47 +1,48 @@
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
-
-const adapter = new FileSync('db.json');
+const shortid = require('shortid');
+const adapter = new FileSync('./data/db/db.json');
 const db = low(adapter);
 
 // Set some defaults (required if your JSON file is empty)
-db.defaults({ posts: [], user: {}, count: 0 })
-  .write();
 
 // Add a post
 
-function create(data, resource){
-  db.get(resource)
-  .push(data)
-  .write(); 
-  
-  db.update(`${resource}.count`, n => n + 1)
+exports.createRecord = (data, resource) => {
+  console.log(data, resource);
+  const results = db.get('posts')
+  .push(Object.assign({ id: shortid.generate()}, data))
   .write();
-}
+  
+  db.update(`${resource}.count`, n => n ? n + 1 : 1)
+  .write();
+  
+  return results;
+};
 
-function getById(id, resource){
+exports.getSingleRecord = (id, resource) => {
   
   db.get(resource)
   .find({ id })
   .value()
  
-}
+};
 
 
 // Update a post.
-function update(id, resource, data){
+exports.updateRecord = (id, resource, data) => {
   db.get(resource)
   .find({ id })
   .assign(data)
   .write();
-}
+};
 
 // Remove posts.
-function remove(id, resource){
+exports.deleteRecord =  (id, resource) => {
   db.get(resource)
   .remove({ id })
   .write()
-}
+};
 
 
 

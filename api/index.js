@@ -4,9 +4,10 @@ const users = require('./routes/users.routes');
 
 const api = express();
 const dbMgr = require('./data/db/jsondb-seed');
-
+var bodyParser = require('body-parser');
 dbMgr.seedDb();
 
+api.use(bodyParser.json());
 
 // Middleware
 const logger = winston.createLogger({
