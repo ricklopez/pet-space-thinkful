@@ -1,4 +1,4 @@
-
+const userRepository = require('./../repositories/user.repository');
      module.exports.getUsers = (request, response) => {
        response.send('Get Users:' + request.url);
      };
@@ -6,7 +6,10 @@
        response.send('Get User By Id:' + request.url + request.params.userId);
      };
      module.exports.createUser = (request, response) => {
-       response.send('Create Users:' + request.url);
+       console.log(request.body);
+       const result = userRepository.createUser(request.body);
+       console.log(result);
+       response.send(result);
      };
      module.exports.updateUser = (request, response) => {
        response.send('Update Users:' + request.url);
